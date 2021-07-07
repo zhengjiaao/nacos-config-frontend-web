@@ -10,8 +10,8 @@
     </parent>
 
     <groupId>com.dist</groupId>
-    <artifactId>nacos-config-frontend</artifactId>
-    <version>web</version>
+    <artifactId>nacos-config-frontend-web</artifactId>
+    <version>1.0.0.RELEASE</version>
     <packaging>war</packaging>
 
 	<properties>

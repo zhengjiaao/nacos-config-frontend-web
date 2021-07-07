@@ -19,7 +19,7 @@ spring:
 # 白名单 允许请求的Ip
 white:
   list:
-    enabled: false  # 启用，只运行ips配置的Ip可请求通过
+    enabled: false  # true启用: 仅支持配置的ips可通过请求
     ips:
       - 192.168.1.40
 
