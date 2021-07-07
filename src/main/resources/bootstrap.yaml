@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /@project.artifactId@
+    session:
+      timeout: PT60M
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jmx:
+    default-domain: nacos-config-web
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 192.168.1.40:28848  # nacos 连接地址
+
+# 白名单 允许请求的Ip
+white:
+  list:
+    enabled: false  # 启用，只运行ips配置的Ip可请求通过
+    ips:
+      - 192.168.1.40
+
+# 日志文件配置
+logging:
+  config: classpath:logback-spring.xml
+  system:
+    name: @artifactId@
+    active: web
+    logLevel: info
+    logBaseDir: ../dist-log
+    maxHistory: 30
+    maxFileSize: 20MB
+  console:
+    logLevel: info
+  rely:
+    logLevel: warn
+
