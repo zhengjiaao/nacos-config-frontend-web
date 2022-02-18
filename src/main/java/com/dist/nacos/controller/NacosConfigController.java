@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,51 +31,53 @@ import java.util.Properties;
 @Slf4j
 @Api(tags = "Nacos 配置管理中心")
 @RestController
-@RequestMapping("/nacos/config")
+@RequestMapping("/nacos")
 public class NacosConfigController {
 
     @Autowired
     private NacosConfigProperties nacosConfigProperties;
 
-    @ApiOperation(value = "获取Nacos中Json配置文件", notes = "例如a.json")
-    @GetMapping("json/v1")
-    public Object getJson(@ApiParam(value = "命名空间ID", defaultValue = "frontend") @RequestParam String namespace,
-                          @ApiParam(value = "组", defaultValue = "DEFAULT_GROUP") @RequestParam String group,
-                          @ApiParam(value = "配置文件名称", defaultValue = "a.json") @RequestParam String dataid) throws Exception {
-
-        if (!dataid.endsWith(".json")) {
-            throw new RuntimeException("必须是以.json结尾的文件类型！");
+    @ApiOperation(value = "获取Nacos配置文件", notes = "目前支持类型: *.json、*.html、*.text、*.xml、*.yaml、*.properties")
+    @GetMapping("/get/config")
+    public Object getConfig(@ApiParam(value = "命名空间ID", defaultValue = "frontend") @RequestParam String namespaceId,
+                            @ApiParam(value = "组", defaultValue = "DEFAULT_GROUP") @RequestParam(required = false, defaultValue = "DEFAULT_GROUP") String group,
+                            @ApiParam(value = "配置文件", defaultValue = "a.json") @RequestParam String dataId) throws Exception {
+        //文件扩展名
+        String extension = FilenameUtils.getExtension(dataId);
+        if (StringUtils.isEmpty(extension)) {
+            throw new RuntimeException("参数【dataid】的值，必须带扩展名 例：*.json,*.html,*.text。\n目前仅支持以上三种类型。");
         }
-        String configContent = getConfigContent(namespace, group, dataid);
-        log.info(configContent);
-        JSONObject json = (JSONObject) JSONObject.parse(configContent);
-        return json;
-    }
 
-    @ApiOperation(value = "获取Nacos中Text配置文件", notes = "例如a.text")
-    @GetMapping("text/v1")
-    public Object getText(@ApiParam(value = "命名空间ID", defaultValue = "frontend") @RequestParam String namespace,
-                          @ApiParam(value = "组", defaultValue = "DEFAULT_GROUP") @RequestParam String group,
-                          @ApiParam(value = "配置文件名称", defaultValue = "a.text") @RequestParam String dataid) throws Exception {
-        if (!dataid.endsWith(".text")) {
-            throw new RuntimeException("必须是以.text结尾的文件类型！");
-        }
-        String configContent = getConfigContent(namespace, group, dataid);
-        log.info(configContent);
-        return configContent;
-    }
+        String configContent = this.getConfigContent(namespaceId, group, dataId);
+        log.info("文件：{}", dataId);
+        log.info("数据：\n{}", configContent);
 
-    @ApiOperation(value = "获取Nacos中Html配置文件", notes = "例如a.html")
-    @GetMapping("html/v1")
-    public Object getHtml(@ApiParam(value = "命名空间ID", defaultValue = "frontend") @RequestParam String namespace,
-                          @ApiParam(value = "组", defaultValue = "DEFAULT_GROUP") @RequestParam String group,
-                          @ApiParam(value = "配置文件名称", defaultValue = "a.html") @RequestParam String dataid) throws Exception {
-        if (!dataid.endsWith(".html")) {
-            throw new RuntimeException("必须是以.html结尾的文件类型！");
+        if ("json".equals(extension)) {
+            return JSONObject.parse(configContent);
         }
-        String configContent = getConfigContent(namespace, group, dataid);
-        log.info(configContent);
-        return configContent;
+
+        if ("html".equals(extension)) {
+            return configContent;
+        }
+
+        if ("text".equals(extension)) {
+            return configContent;
+        }
+
+        //以下 xml、yaml、properties 需要前端转换 去掉换行符等
+        if ("xml".equals(extension)) {
+            return configContent;
+        }
+
+        if ("yaml".equals(extension)) {
+            return configContent;
+        }
+
+        if ("properties".equals(extension)) {
+            return configContent;
+        }
+
+        throw new RuntimeException("暂时不支持获取扩展名为: 【*." + extension + "】的配置文件");
     }
 
     /**
@@ -109,6 +112,8 @@ public class NacosConfigController {
         // 配置中心的命名空间id
         properties.put(PropertyKeyConst.NAMESPACE, namespace);
         ConfigService configService = NacosFactory.createConfigService(properties);
+
+        System.out.println(configService.getServerStatus());
         // 根据dataId、group定位到具体配置文件，获取其内容. 方法中的三个参数分别是: dataId, group, 超时时间
         return configService.getConfig(dataid, group, 3000L);
     }
