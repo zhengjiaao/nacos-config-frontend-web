@@ -48,21 +48,20 @@ white:
 访问swagger地址：http://127.0.0.1:8080/nacos-config-frontend-web/swagger-ui.html#/
 目前支持读取nacos中的 json、text、html等配置文件内容
 
-![4.png](image/4.png)
 ![5.png](image/5.png)
 
 返回数据
 ![6.png](image/6.png)
 
-请求接口：http://127.0.0.1:8080/nacos-config-frontend-web/nacos/config/json/v1?dataid=a.json&group=DEFAULT_GROUP&namespace=frontend
+请求接口：http://127.0.0.1:8080/nacos-config-frontend-web/nacos/get/config?dataId=a.json&group=DEFAULT_GROUP&namespaceId=frontend
 
 
 #### 前端接入后台读取nacos配置
 
-例如，读取json配置文件内容
-http://127.0.0.1:8080/nacos-config-frontend-web/nacos/config/json/v1?dataid=a.json&group=DEFAULT_GROUP&namespace=frontend
+示例：读取json配置文件内容
+http://127.0.0.1:8080/nacos-config-frontend-web/nacos/get/config?dataId=a.json&group=DEFAULT_GROUP&namespaceId=frontend
 
->请求参数：dataid 配置文件名称，group 组，namespace 命名空间 ，参数是对应nacos配置的
+>请求参数：dataId 配置文件名称，group 组，namespaceId 命名空间ID ，参数是对应nacos配置的
 
 获取json内容
 ```json
