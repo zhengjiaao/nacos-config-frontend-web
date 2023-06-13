@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * http://localhost:8080/nacos-config-frontend-web/swagger-ui.html
  * Company: 上海数慧系统技术有限公司
  * Department: 数据中心
  * Date: 2021-06-29 17:40

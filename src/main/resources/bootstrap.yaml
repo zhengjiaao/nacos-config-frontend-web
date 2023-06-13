@@ -14,14 +14,14 @@ spring:
     nacos:
       config:
         enabled: true
-        server-addr: 192.168.1.40:28848  # nacos 连接地址
+        server-addr: ${NACOS_SERVER:127.0.0.1:8848}  # nacos 连接地址
 
 # 白名单 允许请求的Ip
 white:
   list:
     enabled: false  # true启用: 仅支持配置的ips可通过请求
     ips:
-      - 192.168.1.40
+      - 127.0.0.1
 
 # 日志文件配置
 logging:
