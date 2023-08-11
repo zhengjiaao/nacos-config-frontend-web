@@ -1,9 +1,7 @@
-package com.dist.nacos.filter;
+package com.dist.nacos.interceptors;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
 
 /**
  * Company: 上海数慧系统技术有限公司
