@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,18 +20,19 @@ import java.util.List;
  * Email: zhengja@dist.com.cn
  * Desc：
  */
-public class IPInterceptor implements HandlerInterceptor {
+public class IPWhitelistInterceptor implements HandlerInterceptor {
 
-    private static final Logger LOG = Logger.getLogger(IPInterceptor.class.getName());
+    private static final Logger LOG = Logger.getLogger(IPWhitelistInterceptor.class.getName());
 
-    private Boolean enabled;
+    private final Boolean enabled;
 
-    private List<String> whitelistIps;
+    private List<String> whitelistIps = new ArrayList<>();
 
-    public IPInterceptor(WhiteList whiteList) {
-        this.enabled = whiteList.getEnabled();
-        if (!whiteList.getIps().isEmpty()) {
-            this.whitelistIps = whiteList.getIps();
+    public IPWhitelistInterceptor(IPWhitelist ipWhitelist) {
+        this.enabled = ipWhitelist.getEnabled();
+        String[] ips = ipWhitelist.getIps();
+        if (enabled && ips != null && 0 < ips.length) {
+            this.whitelistIps = new ArrayList<>(Arrays.asList(ips));
         }
         this.whitelistIps.add("127.0.0.1");
         this.whitelistIps.add("0:0:0:0:0:0:0:1");

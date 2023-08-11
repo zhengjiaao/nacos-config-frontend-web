@@ -14,11 +14,11 @@ import java.util.List;
  * Desc：过滤器属性配置
  */
 @Data
-@ConfigurationProperties(prefix = "white.list")
-public class WhiteList {
+@ConfigurationProperties(prefix = "whitelist")
+public class IPWhitelist {
 
     //默认不启用白名单
     private Boolean enabled = false;
     //白名单Ip列表
-    private List<String> ips;
+    private String[] ips;
 }

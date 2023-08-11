@@ -17,16 +17,10 @@
 	<properties>
         <java.version>1.8</java.version>
         <spring-boot.version>2.2.8.RELEASE</spring-boot.version>
-        <!--start集成swagger-API-->
-        <swagger.version>1.5.21</swagger.version>
-        <javassist.version>3.18.2-GA</javassist.version>
-        <springfox.version>2.9.2</springfox.version>
-        <!--打包跳过测试-->
         <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -47,42 +41,6 @@
             <artifactId>tomcat-embed-jasper</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!--公司自研依赖-->
-        <dependency>
-            <groupId>com.dist.zja</groupId>
-            <artifactId>nacos-config</artifactId>
-            <version>2.0-SNAPSHOT</version>
-        </dependency>
-
-        <!--========Start集成swagger-API========-->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>${javassist.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-models</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <!--========End 集成swagger-API========-->
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -91,6 +49,23 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.83</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+        <!--公司自研依赖-->
+        <dependency>
+            <groupId>com.dist.zja</groupId>
+            <artifactId>nacos-config</artifactId>
+            <version>2.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

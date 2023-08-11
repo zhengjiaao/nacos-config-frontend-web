@@ -16,12 +16,18 @@ spring:
         enabled: true
         server-addr: ${NACOS_SERVER:127.0.0.1:8848}  # nacos 连接地址
 
-# 白名单 允许请求的Ip
-white:
-  list:
-    enabled: false  # true启用: 仅支持配置的ips可通过请求
-    ips:
-      - 127.0.0.1
+# 白名单 允许请求的Ip，默认false，未限制ip访问
+whitelist:
+  enabled: ${WHITELIST_ENABLED:false}    # 默认false，当值为 true 时，仅支持配置的ips可通过请求访问
+  ips: ${WHITELIST_IP:127.0.0.1}         # 配置ip白名单，示例：127.0.0.1,168.122.12.15
+
+# swagger 认证拦截
+knife4j:
+  enable: true
+  basic:
+    enable: true
+    username: ${SWAGGER_USERNAME:admin}
+    password: ${SWAGGER_PASSWORD:admin}
 
 # 日志文件配置
 logging:

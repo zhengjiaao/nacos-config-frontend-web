@@ -3,8 +3,9 @@ package com.dist.nacos.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.dist.nacos.filter.IPInterceptor;
-import com.dist.nacos.filter.WhiteList;
+import com.dist.nacos.filter.IPWhitelist;
+import com.dist.nacos.filter.IPWhitelistInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -24,13 +25,12 @@ import java.util.List;
  * Email: zhengja@dist.com.cn
  * Desc：Web Mvc配置
  */
-@Component
 @Configuration
-public class WebMvcFastJsonConfig extends WebMvcConfigurationSupport {
+public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Bean
-    public WhiteList whiteList() {
-        return new WhiteList();
+    public IPWhitelist ipWhitelist() {
+        return new IPWhitelist();
     }
 
     /**
@@ -68,14 +68,6 @@ public class WebMvcFastJsonConfig extends WebMvcConfigurationSupport {
     }
 
     /**
-     * 启动时页面重定向到swagger页面
-     */
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/", "/swagger-ui.html");
-    }
-
-    /**
      * 添加资源: 静态不被springmvc拦截
      *
      * @param registry
@@ -84,14 +76,9 @@ public class WebMvcFastJsonConfig extends WebMvcConfigurationSupport {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //开放所有资源路径
         registry.addResourceHandler("/**").addResourceLocations("/");
-        // 添加 swagger和index页面
-        registry.addResourceHandler("swagger-ui.html", "index-stop.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/META-INF/resources/static/");
 
-        // 自定义静态资源文件目录 映射到本机服务器目录
-//        registry.addResourceHandler(ConfigConstants.file.proxyPath + "/**").addResourceLocations("file:" + ConfigConstants.file.localStoragePath + "\\");
+        //解决swagger3无法访问
+        registry.addResourceHandler("/swagger-ui/**").addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/");
     }
 
     /**
@@ -110,14 +97,14 @@ public class WebMvcFastJsonConfig extends WebMvcConfigurationSupport {
 
     //自定义拦截器
     @Bean
-    public IPInterceptor iPInterceptor() {
-        return new IPInterceptor(whiteList());
+    public IPWhitelistInterceptor ipWhitelistInterceptor() {
+        return new IPWhitelistInterceptor(ipWhitelist());
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //拦截器注册
-        InterceptorRegistration registration = registry.addInterceptor(iPInterceptor())
+        InterceptorRegistration registration = registry.addInterceptor(ipWhitelistInterceptor())
                 .addPathPatterns("/**");
 
         //默认 不拦截swagger
